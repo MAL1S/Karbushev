@@ -1,6 +1,5 @@
 package com.example.karbushev.network
 
-import com.example.karbushev.data.Gif
 import com.example.karbushev.utils.API
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -24,8 +23,8 @@ interface APIService {
         }
 
         @Synchronized
-        fun buildService(): APIService {
-            return getInstance().create(APIService::class.java)
+        fun buildService(): Api {
+            return getInstance().create(Api::class.java)
         }
     }
 }
