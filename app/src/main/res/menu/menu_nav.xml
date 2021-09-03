@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/latestFragment"
+        android:title="@string/latest" />
+    <item
+        android:id="@+id/bestFragment"
+        android:title="@string/best"
+        />
+    <item
+        android:id="@+id/hotFragment"
+        android:title="@string/hot"
+        />
+
+</menu>

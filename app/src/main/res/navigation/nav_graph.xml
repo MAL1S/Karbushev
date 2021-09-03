@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/latestFragment">
+
+    <fragment
+        android:id="@+id/bestFragment"
+        android:name="com.example.karbushev.ui.BestFragment"
+        android:label="fragment_best"
+        tools:layout="@layout/fragment_best" />
+    <fragment
+        android:id="@+id/hotFragment"
+        android:name="com.example.karbushev.ui.HotFragment"
+        android:label="fragment_hot"
+        tools:layout="@layout/fragment_hot" />
+    <fragment
+        android:id="@+id/latestFragment"
+        android:name="com.example.karbushev.ui.LatestFragment"
+        android:label="fragment_latest"
+        tools:layout="@layout/fragment_latest" />
+</navigation>
