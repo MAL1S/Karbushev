@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/bestFragment"
-        android:name="com.example.karbushev.ui.BestFragment"
+        android:name="com.example.karbushev.ui.fragments.BestFragment"
         android:label="fragment_best"
-        tools:layout="@layout/fragment_best" />
+        tools:layout="@layout/fragment_gif" />
     <fragment
         android:id="@+id/hotFragment"
-        android:name="com.example.karbushev.ui.HotFragment"
+        android:name="com.example.karbushev.ui.fragments.HotFragment"
         android:label="fragment_hot"
-        tools:layout="@layout/fragment_hot" />
+        tools:layout="@layout/fragment_gif" />
     <fragment
         android:id="@+id/latestFragment"
-        android:name="com.example.karbushev.ui.LatestFragment"
+        android:name="com.example.karbushev.ui.fragments.LatestFragment"
         android:label="fragment_latest"
-        tools:layout="@layout/fragment_latest" />
+        tools:layout="@layout/fragment_gif" />
 </navigation>

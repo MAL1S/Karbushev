@@ -12,6 +12,7 @@
         android:layout_width="@dimen/image_width"
         android:layout_height="@dimen/image_height"
         app:cardCornerRadius="@dimen/card_corner_radius"
+        android:elevation="@dimen/app_elevation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -66,6 +67,7 @@
         android:background="@color/white"
         android:elevation="@dimen/app_elevation"
         style="@style/AppTheme"
+        android:clickable="false"
         app:tint="@color/red"
         android:src="@drawable/back"
         app:backgroundTint="@color/white"

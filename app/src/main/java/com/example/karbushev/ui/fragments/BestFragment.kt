@@ -1,4 +1,4 @@
-package com.example.karbushev.ui
+package com.example.karbushev.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,6 +14,6 @@ class BestFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_best, container, false)
+        return inflater.inflate(R.layout.fragment_gif, container, false)
     }
 }

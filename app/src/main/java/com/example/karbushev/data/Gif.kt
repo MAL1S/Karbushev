@@ -1,6 +1,8 @@
 package com.example.karbushev.data
 
+import com.google.gson.annotations.SerializedName
+
 data class Gif(
-    var url: String,
-    var description: String
+    @SerializedName("gifURL") val url: String,
+    @SerializedName("description") val desc: String
 )

@@ -5,3 +5,4 @@ val TAB_TITLES = listOf<String>(
     "Лучшие",
     "Горячие"
 )
+const val API = "http://developerslife.ru/"
