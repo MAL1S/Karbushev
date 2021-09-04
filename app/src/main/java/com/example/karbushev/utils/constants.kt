@@ -1,5 +1,6 @@
 package com.example.karbushev.utils
 
+import com.example.karbushev.MainActivity
 import com.example.karbushev.ui.MainViewModel
 
 const val LOG = "logd"
@@ -12,4 +13,5 @@ const val API = "http://developerslife.ru/"
 const val LATEST = "latest"
 const val HOT = "hot"
 const val TOP = "top"
-lateinit var VIEW_MODEL: MainViewModel
+//lateinit var VIEW_MODEL: MainViewModel
+lateinit var APP_ACTIVITY: MainActivity

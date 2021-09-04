@@ -28,6 +28,7 @@ class MainViewModel: ViewModel() {
             override fun onResponse(call: Call<Data>, response: Response<Data>) {
                 data.postValue(response.body())
                 Log.d(LOG, "refreshed")
+                //Log.d(LOG, "======" + data.value?.result.toString())
             }
 
             override fun onFailure(call: Call<Data>, t: Throwable) {
