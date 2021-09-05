@@ -9,4 +9,5 @@
     <string name="internet_no_connection">Не удалось загрузить данные. Проверьте подключение к интернету и попробуйте еще раз.</string>
     <string name="random">Рандомные</string>
     <string name="error_hot">Ошибка, при запросе к разделу hot всегда возвращается пустой список</string>
+    <string name="no_internet">Не удалось подключиться к интернету</string>
 </resources>

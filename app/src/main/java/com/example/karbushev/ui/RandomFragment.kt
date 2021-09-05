@@ -35,6 +35,12 @@ class RandomFragment : Fragment() {
 
     private var wasLastNext = true
 
+    private var state: String = ""
+
+    private var rnd: Int = 0
+
+    private var wasErrorLast = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,11 +60,21 @@ class RandomFragment : Fragment() {
     private fun init() {
         mViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        Log.d(LOG, gifList.toString())
+        CURRENT_TAB = RANDOM
+
+        mBinding.buttonRefresh.setOnClickListener {
+            if (!checkInternetConnection()) {
+                showToast(getString(R.string.no_internet))
+            } else {
+                mBinding.loading.visibility = View.VISIBLE
+                if (rnd != 0) reloadGif()
+                else init()
+            }
+        }
 
         if (!checkInternetConnection()) {
             Log.d(LOG, "no internet first step")
-            showToast("Не удалось подключиться к интернету")
+            showToast(getString(R.string.no_internet))
             mBinding.buttonBack.isClickable = false
             mBinding.buttonNext.isClickable = false
             showDisconnectedView()
@@ -66,6 +82,7 @@ class RandomFragment : Fragment() {
         } else showConnectedView()
 
         mViewModel.gif.observe(APP_ACTIVITY) {
+            Log.d(LOG, "observed gif")
             if (it == null) {
                 updateGif()
 
@@ -88,9 +105,12 @@ class RandomFragment : Fragment() {
         mViewModel.getRandomGif(randomGifNumber())
 
         mViewModel.state.observe(APP_ACTIVITY) {
+            state = it
             Log.d(LOG, "observed error = $it")
             if (it == "error") {
+                wasErrorLast = true
                 mBinding.buttonNext.isClickable = false
+                if (currentGifIndex != 0) mBinding.buttonBack.isClickable = true
                 showDisconnectedView()
             }
         }
@@ -99,6 +119,7 @@ class RandomFragment : Fragment() {
             mBinding.image.visibility = View.INVISIBLE
             mBinding.loading.visibility = View.VISIBLE
             mBinding.buttonNext.isClickable = false
+            mBinding.buttonBack.isClickable = false
             if (currentGifIndex + 1 == gifList.size) updateGif()
             else {
                 currentGifIndex++
@@ -131,7 +152,9 @@ class RandomFragment : Fragment() {
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    wasErrorLast = true
                     showDisconnectedView()
+                    if (currentGifIndex != 0) mBinding.buttonBack.isClickable = true
                     return false
                 }
 
@@ -142,6 +165,8 @@ class RandomFragment : Fragment() {
                     dataSource: DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    wasErrorLast = false
+                    Log.d(LOG, "loaded")
                     showConnectedView()
                     mBinding.buttonNext.isClickable = true
                     if (currentGifIndex != 0) mBinding.buttonBack.isClickable = true
@@ -154,18 +179,27 @@ class RandomFragment : Fragment() {
     }
 
     private fun setPrevGif() {
-        currentGifIndex--
+        //if (state == ERROR) currentGifIndex--
+        if (!wasErrorLast) currentGifIndex--
+        wasErrorLast = false
         Glide
             .with(APP_ACTIVITY)
             .load(gifList[currentGifIndex].gifURL)
             .onlyRetrieveFromCache(true)
             .into(mBinding.image)
         mBinding.description.text = gifList[currentGifIndex].description
+        showConnectedView()
+        mBinding.buttonNext.isClickable = true
     }
 
     private fun updateGif() {
         Log.d(LOG, "updated")
-        val rnd = randomGifNumber()
+        rnd = randomGifNumber()
+        Log.d(LOG, "$rnd")
+        mViewModel.getRandomGif(rnd)
+    }
+
+    private fun reloadGif() {
         Log.d(LOG, "$rnd")
         mViewModel.getRandomGif(rnd)
     }

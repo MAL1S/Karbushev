@@ -8,14 +8,14 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_margin="@dimen/margin_view"
-        android:textSize="32sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
         android:id="@+id/main_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_view"
         android:text="@string/title_main"
+        android:textColor="@color/black"
+        android:textSize="32sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,12 +35,14 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:background="?android:attr/windowBackground"
         android:elevation="@dimen/app_elevation"
         app:itemTextColor="@drawable/bottom_nav_color_selector"
+        app:itemIconTint="@drawable/bottom_nav_color_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_nav" />
 

@@ -3,17 +3,21 @@
 
     <item
         android:id="@+id/randomFragment"
+        android:icon="@drawable/random"
         android:title="@string/random"/>
 
     <item
         android:id="@+id/latestFragment"
+        android:icon="@drawable/resource_new"
         android:title="@string/latest" />
     <item
         android:id="@+id/hotFragment"
+        android:icon="@drawable/hot"
         android:title="@string/hot"
         />
     <item
         android:id="@+id/bestFragment"
+        android:icon="@drawable/best"
         android:title="@string/best"
         />
 

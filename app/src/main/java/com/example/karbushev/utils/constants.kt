@@ -11,6 +11,7 @@ val TAB_TITLES = listOf<String>(
     "top"
 )
 const val HOT = "hot"
+const val RANDOM = "random"
 //lateinit var TAB_LIST: MutableList<Int>
 const val API = "http://developerslife.ru/"
 //lateinit var VIEW_MODEL: MainViewModel

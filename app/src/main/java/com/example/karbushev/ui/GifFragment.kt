@@ -75,7 +75,7 @@ class GifFragment : Fragment() {
 
         if (!checkInternetConnection()) {
             Log.d(LOG, "no internet first step")
-            showToast("Не удалось подключиться к интернету")
+            showToast(getString(R.string.no_internet))
             fromButton = false
             mBinding.buttonBack.isClickable = false
             mBinding.buttonNext.isClickable = false
