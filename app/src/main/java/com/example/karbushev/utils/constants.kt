@@ -16,3 +16,5 @@ const val API = "http://developerslife.ru/"
 //lateinit var VIEW_MODEL: MainViewModel
 lateinit var APP_ACTIVITY: MainActivity
 lateinit var CURRENT_TAB: String
+const val ERROR = "error"
+const val SUCCESS = "success"

@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/latestFragment">
+    app:startDestination="@id/randomFragment">
 
-    <!--<fragment
+    <fragment
         android:id="@+id/randomFragment"
-        android:name="com.example.karbushev.ui.GifFragment"
+        android:name="com.example.karbushev.ui.RandomFragment"
         android:label="fragment_best"
-        tools:layout="@layout/fragment_gif" />-->
+        tools:layout="@layout/fragment_gif" />
     <fragment
         android:id="@+id/bestFragment"
         android:name="com.example.karbushev.ui.GifFragment"

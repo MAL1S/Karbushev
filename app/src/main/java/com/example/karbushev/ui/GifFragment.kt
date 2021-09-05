@@ -39,8 +39,6 @@ class GifFragment : Fragment() {
 
     private var wasLastNext = true
 
-    private lateinit var errorState: String
-
     private var fromButton = false
     private var fromUpdating = false
 
@@ -58,7 +56,7 @@ class GifFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        //Log.d(LOG, getSelectedItem(APP_ACTIVITY.bottomNav).toString())
+
         Log.d(LOG, "started")
         init()
     }
@@ -87,7 +85,7 @@ class GifFragment : Fragment() {
 
         mBinding.buttonBack.isClickable = false
 
-        CURRENT_TAB = TAB_TITLES[getSelectedItem(APP_ACTIVITY.bottomNav)]
+        CURRENT_TAB = TAB_TITLES[getSelectedItem(APP_ACTIVITY.bottomNav)-1]
 
         if (CURRENT_TAB == HOT) {
             hotTabError()
@@ -109,9 +107,9 @@ class GifFragment : Fragment() {
             Log.d(LOG, "```````" + it.result.toString())
         }
 
-        mViewModel.error.observe(APP_ACTIVITY) {
+        mViewModel.state.observe(APP_ACTIVITY) {
             Log.d(LOG, "observed error = $it")
-            if (it == "error") {
+            if (it == ERROR) {
                 mBinding.buttonNext.isClickable = false
                 showDisconnectedView()
             }
@@ -141,6 +139,7 @@ class GifFragment : Fragment() {
 
         mBinding.image.visibility = View.INVISIBLE
         mBinding.loading.visibility = View.VISIBLE
+        mBinding.buttonNext.isClickable = false
         if (counter == 5) {
             page++
             counter = 0
@@ -153,6 +152,7 @@ class GifFragment : Fragment() {
         }
         Log.d(LOG, "NO")
         mBinding.image.visibility = View.VISIBLE
+        mBinding.buttonNext.isClickable = true
         //mBinding.loading.visibility = View.INVISIBLE
         //}
     }
@@ -185,6 +185,7 @@ class GifFragment : Fragment() {
                 ): Boolean {
                     fromUpdating = false
                     showConnectedView()
+                    mBinding.buttonNext.isClickable = true
                     return false
                 }
 
@@ -207,11 +208,6 @@ class GifFragment : Fragment() {
             .onlyRetrieveFromCache(true)
             .into(mBinding.image)
         mBinding.description.text = gifList?.get(counter)?.description
-    }
-
-    private fun reDownloadCurrentGif() {
-        counter--
-        setNextGif()
     }
 
     private fun updateList() {
@@ -245,31 +241,7 @@ class GifFragment : Fragment() {
         mBinding.buttonRefresh.visibility = View.INVISIBLE
     }
 
-    private fun checkInternetConnection(): Boolean {
-        val connectivityManager =
-            APP_ACTIVITY.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            val network = connectivityManager.activeNetwork ?: return false
-
-            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-
-            return when {
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-
-                else -> false
-            }
-        } else {
-
-            @Suppress("DEPRECATION") val networkInfo =
-                connectivityManager.activeNetworkInfo ?: return false
-            @Suppress("DEPRECATION")
-            return networkInfo.isConnected
-        }
-    }
 
     override fun onStop() {
         super.onStop()
