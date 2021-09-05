@@ -51,4 +51,8 @@ class MainViewModel : ViewModel() {
             }
         })
     }
+
+    fun raiseError() {
+        state.postValue(ERROR)
+    }
 }

@@ -1,10 +1,6 @@
 package com.example.karbushev.ui
 
-import android.content.Context
 import android.graphics.drawable.Drawable
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +18,7 @@ import com.example.karbushev.R
 import com.example.karbushev.data.Gif
 import com.example.karbushev.databinding.FragmentGifBinding
 import com.example.karbushev.utils.*
+import java.lang.Exception
 
 
 class GifFragment : Fragment() {
@@ -41,6 +38,12 @@ class GifFragment : Fragment() {
 
     private var fromButton = false
     private var fromUpdating = false
+
+    private var loadedGifList = mutableListOf<Gif>()
+    private var loadedCounter = -1
+
+    private var wasErrorLast = false
+    private var state: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,13 +65,20 @@ class GifFragment : Fragment() {
     }
 
     private fun init() {
+        mViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
         mBinding.buttonRefresh.setOnClickListener {
-            if (!fromButton) init()
+            if (!checkInternetConnection()) {
+                showToast(getString(R.string.no_internet))
+            }
             else {
-                if (fromUpdating) updateList()
+                if (!fromButton) init()
                 else {
-                    counter--
-                    next()
+                    if (fromUpdating) updateList()
+                    else {
+                        //counter--
+                        next()
+                    }
                 }
             }
         }
@@ -83,16 +93,12 @@ class GifFragment : Fragment() {
             return
         } else showConnectedView()
 
-        mBinding.buttonBack.isClickable = false
-
-        CURRENT_TAB = TAB_TITLES[getSelectedItem(APP_ACTIVITY.bottomNav)-1]
+        CURRENT_TAB = TAB_TITLES[getSelectedItem(APP_ACTIVITY.bottomNav) - 1]
 
         if (CURRENT_TAB == HOT) {
             hotTabError()
             return
         }
-
-        mViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         mViewModel.getGifs(CURRENT_TAB, page)
         //Log.d(LOG, "list = " + gifList.toString())
@@ -108,14 +114,19 @@ class GifFragment : Fragment() {
         }
 
         mViewModel.state.observe(APP_ACTIVITY) {
+            state = it
             Log.d(LOG, "observed error = $it")
             if (it == ERROR) {
+                wasErrorLast = true
                 mBinding.buttonNext.isClickable = false
+                mBinding.buttonBack.isClickable = true
                 showDisconnectedView()
             }
         }
 
         mBinding.buttonNext.setOnClickListener {
+            mBinding.buttonNext.isClickable = false
+            mBinding.buttonBack.isClickable = false
             fromButton = true
             next()
         }
@@ -124,7 +135,7 @@ class GifFragment : Fragment() {
 //            if (counter == 1 && wasLastNext || counter == 0 && !wasLastNext) showToast("В стеке нет гифок")
 //            else setPrevGif()
             setPrevGif()
-            if (counter == 0) mBinding.buttonBack.isClickable = false
+            if (loadedCounter == 0) mBinding.buttonBack.isClickable = false
         }
         mBinding.buttonBack.isClickable = false
     }
@@ -140,38 +151,57 @@ class GifFragment : Fragment() {
         mBinding.image.visibility = View.INVISIBLE
         mBinding.loading.visibility = View.VISIBLE
         mBinding.buttonNext.isClickable = false
-        if (counter == 5) {
+
+        if (counter == 5 && loadedCounter + 1 == loadedGifList.size && checkInternetConnection()) {
             page++
             counter = 0
             Log.d(LOG, "error in next")
             updateList()
-            mBinding.buttonBack.isClickable = false
+            //mBinding.buttonBack.isClickable = false
         } else {
             setNextGif()
-            mBinding.buttonBack.isClickable = true
+            //mBinding.buttonBack.isClickable = true
         }
+
+
         Log.d(LOG, "NO")
         mBinding.image.visibility = View.VISIBLE
-        mBinding.buttonNext.isClickable = true
         //mBinding.loading.visibility = View.INVISIBLE
         //}
     }
 
     private fun setNextGif() {
-        Log.d(LOG, "$counter")
-        if (!wasLastNext) counter++
+        var check = true
+        Log.d(LOG, "${loadedCounter + 1}, ${loadedGifList.size}")
+        val gif = if (loadedCounter + 1 != loadedGifList.size) {
+            check = false
+            loadedGifList[++loadedCounter]
+        } else {
+            Log.d(LOG, state)
+            if (state != ERROR && !wasLastNext && checkInternetConnection()) counter++
+            Log.d(LOG, "counter = $counter")
+            try {
+                gifList?.get(counter)
+            } catch (ex: Exception) {
+                mViewModel.raiseError()
+                return
+            }
+        }
         Glide
             .with(APP_ACTIVITY)
-            .load(gifList?.get(counter)?.gifURL)
+            .load(gif?.gifURL)
             .diskCacheStrategy(DiskCacheStrategy.DATA)
             .skipMemoryCache(true)
-            .listener(object: RequestListener<Drawable> {
+            .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    wasErrorLast = true
+                    if (loadedCounter != 0) mBinding.buttonBack.isClickable = true
+                    mBinding.buttonNext.isClickable = false
                     showDisconnectedView()
                     return false
                 }
@@ -183,31 +213,45 @@ class GifFragment : Fragment() {
                     dataSource: DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    wasErrorLast = false
+                    if (loadedCounter + 1 == loadedGifList.size && state != ERROR && checkInternetConnection()) {
+                        loadedGifList.add(gif!!)
+                        loadedCounter++
+                    }
                     fromUpdating = false
                     showConnectedView()
                     mBinding.buttonNext.isClickable = true
+                    if (loadedCounter != 0) mBinding.buttonBack.isClickable = true
                     return false
                 }
 
             })
             .into(mBinding.image)
-        mBinding.description.text = gifList?.get(counter)?.description
-        counter++
-        Log.d(LOG, "counter changed = $counter")
-        wasLastNext = true
+        mBinding.description.text = gif?.description
+        if (check && checkInternetConnection()) {
+            counter++
+            Log.d(LOG, "counter changed = $counter")
+            wasLastNext = true
+        }
     }
 
     private fun setPrevGif() {
-        if (wasLastNext) {
-            counter -= 2
-            wasLastNext = false
-        } else counter--
+//        if (wasLastNext) {
+//            counter -= 2
+//            wasLastNext = false
+//        } else counter--
+        if (!wasErrorLast) loadedCounter--
+        wasErrorLast = false
+        val gif = loadedGifList[loadedCounter]
+
         Glide
             .with(APP_ACTIVITY)
-            .load(gifList?.get(counter)?.gifURL)
+            .load(gif.gifURL)
             .onlyRetrieveFromCache(true)
             .into(mBinding.image)
-        mBinding.description.text = gifList?.get(counter)?.description
+        mBinding.description.text = gif.description
+        mBinding.buttonNext.isClickable = true
+        showConnectedView()
     }
 
     private fun updateList() {
@@ -240,7 +284,6 @@ class GifFragment : Fragment() {
         mBinding.errorMessage.visibility = View.INVISIBLE
         mBinding.buttonRefresh.visibility = View.INVISIBLE
     }
-
 
 
     override fun onStop() {
