@@ -4,7 +4,7 @@
     <dimen name="button_arrow_size">60dp</dimen>
     <dimen name="app_elevation">10dp</dimen>
     <dimen name="button_floating_border">0dp</dimen>
-    <dimen name="image_width">300dp</dimen>
-    <dimen name="image_height">500dp</dimen>
-    <dimen name="card_corner_radius">40dp</dimen>
+    <dimen name="image_width">320dp</dimen>
+    <dimen name="image_height">450dp</dimen>
+    <dimen name="card_corner_radius">10dp</dimen>
 </resources>

@@ -12,4 +12,10 @@ interface Api {
         @Path("category") category: String,
         @Path("pageNumber") pageNumber: Int
     ): Call<Data>
+
+    @GET("/{category}/{pageNumber}?json=true")
+    fun getRandomGif(
+        @Path("category") category: String,
+        @Path("pageNumber") pageNumber: Int
+    ): Call<Data>
 }

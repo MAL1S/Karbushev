@@ -5,13 +5,14 @@ import com.example.karbushev.ui.MainViewModel
 
 const val LOG = "logd"
 val TAB_TITLES = listOf<String>(
-    "Последние",
-    "Лучшие",
-    "Горячие"
+    //"random",
+    "latest",
+    "hot",
+    "top"
 )
-const val API = "http://developerslife.ru/"
-const val LATEST = "latest"
 const val HOT = "hot"
-const val TOP = "top"
+//lateinit var TAB_LIST: MutableList<Int>
+const val API = "http://developerslife.ru/"
 //lateinit var VIEW_MODEL: MainViewModel
 lateinit var APP_ACTIVITY: MainActivity
+lateinit var CURRENT_TAB: String

@@ -5,19 +5,24 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/latestFragment">
 
+    <!--<fragment
+        android:id="@+id/randomFragment"
+        android:name="com.example.karbushev.ui.GifFragment"
+        android:label="fragment_best"
+        tools:layout="@layout/fragment_gif" />-->
     <fragment
         android:id="@+id/bestFragment"
-        android:name="com.example.karbushev.ui.fragments.BestFragment"
+        android:name="com.example.karbushev.ui.GifFragment"
         android:label="fragment_best"
         tools:layout="@layout/fragment_gif" />
     <fragment
         android:id="@+id/hotFragment"
-        android:name="com.example.karbushev.ui.fragments.HotFragment"
+        android:name="com.example.karbushev.ui.GifFragment"
         android:label="fragment_hot"
         tools:layout="@layout/fragment_gif" />
     <fragment
         android:id="@+id/latestFragment"
-        android:name="com.example.karbushev.ui.fragments.LatestFragment"
+        android:name="com.example.karbushev.ui.GifFragment"
         android:label="fragment_latest"
         tools:layout="@layout/fragment_gif" />
 </navigation>

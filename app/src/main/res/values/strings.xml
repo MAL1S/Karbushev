@@ -6,4 +6,7 @@
     <string name="best">Лучшие</string>
     <string name="hot">Горячие</string>
     <string name="title_main">Developers Life</string>
+    <string name="internet_no_connection">Не удалось загрузить данные. Проверьте подключение к интернету и попробуйте еще раз.</string>
+    <string name="random">Рандомные</string>
+    <string name="error_hot">Ошибка, при запросе к разделу hot всегда возвращается пустой список</string>
 </resources>

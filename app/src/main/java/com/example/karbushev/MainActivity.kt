@@ -6,16 +6,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
 import com.example.karbushev.databinding.ActivityMainBinding
 import com.example.karbushev.databinding.FragmentGifBinding
 import com.example.karbushev.ui.MainViewModel
 import com.example.karbushev.utils.APP_ACTIVITY
 import com.example.karbushev.utils.LOG
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val mBinding get() = _binding!!
+
+    lateinit var bottomNav: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +39,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() {
         APP_ACTIVITY = this
+        bottomNav = mBinding.bottomNav
 
         mBinding.bottomNav.setupWithNavController(findNavController(R.id.fragment_container))
-
 
     }
 }

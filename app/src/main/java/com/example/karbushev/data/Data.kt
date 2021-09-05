@@ -12,8 +12,4 @@ data class Data(
     @SerializedName("totalCount")
     @Expose
     val totalCount: Int
-) {
-    fun getData() {
-
-    }
-}
+)
